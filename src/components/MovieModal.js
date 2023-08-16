@@ -1,6 +1,20 @@
 import React from 'react';
+import axios from 'axios';
+
 
 function MovieModal({ movie }) {
+  const handleDelete = async () => {
+    try {
+      const response = await axios.post('http://localhost:5050/delet', { id: movie.id });
+      if (response.status === 200) {
+        window.location.href = '/'
+        // Perform any UI updates or actions after successful delete
+        console.log('Movie deleted successfully');
+      }
+    } catch (error) {
+      console.error('Error deleting movie:', error);
+    }
+  };
   return (
     <div className="modal fade" id={`cardModal-${movie.id}`} tabIndex="-1" aria-labelledby={`cardModalLabel-${movie.Name}`} aria-hidden="true">
       <div className="modal-dialog">
@@ -17,7 +31,8 @@ function MovieModal({ movie }) {
             {movie.actors && <p className="card-text">Actors: {movie.actors.join(', ')}</p>}
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type='button' className='btn btn-outline-danger' onClick={handleDelete}>Delete</button>
+            <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

@@ -61,10 +61,6 @@ def get_movies():
 def submit_data():
     try:
         data = request.json  
-        # Assuming data is sent as JSON
-        # Process the data as needed
-        # ...
-
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         print(data)
@@ -86,8 +82,44 @@ def submit_data():
     except Exception as e:
         # Return an error response
         return jsonify({'error': str(e)}), 500
-        
-        
+
+
+@app.route('/update', methods=['POST'])
+def update_data():
+    try:
+        data = request.json
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        query = "UPDATE movies (name, release_date, genra, image_url, about, actors) VALUES (%s, %s, %s, %s, %s, %s)"
+        actors_str=', '.join(data['actors'])
+
+        values = (data["moviesName"], data['releaseDate'], data['genre'], data['imageUrl'], data['details'], actors_str)
+        cursor.execute(query, values)
+    except Exception as e:
+        return e
+
+
+@app.route('/delet', methods=['POST'])
+def delete_data():
+    try:
+        data = request.json  
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        print(data)
+        id = data['id']
+        query = f'DELETE FROM movies WHERE id={id}'
+        cursor.execute(query)
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({'messeg': 'Data deleted successfully'})
+    except Exception as e:
+        print(e)
+
+
+
 
     
 if __name__ == "__main__":

@@ -1,69 +1,54 @@
-import React, { useState } from 'react';
-import axios from 'axios';  
+import React, { useState } from "react";
+import axios from "axios";
 
+function UpdateMovieData ({movie}) {
+    const [formData, setFormData] = useState({
+        movieName: '',
+        releaseDate: '',
+        genre: '',
+        actors: [],
+        details: '',
+        imageUrl: '',
+    });
 
-function FormModal() {
-  const [formData, setFormData] = useState({
-    movieName: '',
-    releaseDate: '',
-    genre: '',
-    actors: [],
-    details: '',
-    imageUrl: '',
-  });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      // Send form data to Flask using Axios
-      const response = await axios.post('http://localhost:5050/submit', formData);
-      console.log(response.data); // Do something with the response
-      window.location.href = '/'
-    } catch (error) {
-      console.error('Error sending data:', error);
+        try{
+            const response = await axios.post('http://localhost:5050/update', formData)
+            console.log(response.data);
+            window.location.href='/'
+        }catch (error){
+            console.log("Error sending data: ", error);
+        }
     }
-  };
 
+    const handleInputChange = (e) => {
+        const {name, value} = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
 
+    const handleActorChange = (e) => {
+        const actors = e.target.value.split(',').map((actor) => actor.trim());
+        setFormData((prevData) => ({
+          ...prevData,
+          actors: actors,
+        }));
+      };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  
-
-  const handleActorChange = (e) => {
-    const actors = e.target.value.split(',').map((actor) => actor.trim());
-    setFormData((prevData) => ({
-      ...prevData,
-      actors: actors,
-    }));
-  };
-
-  return (
-    <div>
-      <button
-        className="btn position-fixed end-0 mt-2 me-2 z-1 btn-outline-primary"
-        type="button"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
-        Add Movie
-      </button>
-
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
+      return(
+        <>
+        <div
+            className="modal fade"
+            id={`cardUpdate-${movie.id}`}
+            tabIndex='-1'
+            aria-labelledby="updateMovieCards"
+            aria-hidden="true"
+        >
+            <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
@@ -178,9 +163,9 @@ function FormModal() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+        </div>
+        </>
+      )
 }
 
-export default FormModal;
+export default UpdateMovieData

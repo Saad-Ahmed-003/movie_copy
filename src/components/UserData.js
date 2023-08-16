@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import MovieModal from './MovieModal';
+import UpdateMovieData from './updateMovie';
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap.bundle"
 
 function UserData() {
   const [userData, setUserData] = useState([]);
@@ -41,8 +44,17 @@ function UserData() {
                 >
                   View
                 </button>
+                <button 
+                  type="button"
+                  className='btn btn-outline-primary'
+                  data-bs-toggle='modal'
+                  data-bs-target={`#cardUpdate-${movie.id}`}
+                >
+                  Update
+                </button>
               </div>
             </div>
+            <UpdateMovieData movie={movie}/>
             <MovieModal movie={movie} />
           </div>
         ))}
