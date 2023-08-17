@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import MovieModal from './MovieModal';
 import UpdateMovieData from './updateMovie';
-import "bootstrap/dist/css/bootstrap.min.css"
-import "bootstrap/dist/js/bootstrap.bundle"
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faPen } from "@fortawesome/free-solid-svg-icons";
 
 function UserData() {
   const [userData, setUserData] = useState([]);
@@ -42,7 +44,7 @@ function UserData() {
                   data-bs-toggle='modal'
                   data-bs-target={`#cardModal-${movie.id}`}
                 >
-                  View
+                  <FontAwesomeIcon icon={faEye}/>
                 </button>
                 <button 
                   type="button"
@@ -50,7 +52,7 @@ function UserData() {
                   data-bs-toggle='modal'
                   data-bs-target={`#cardUpdate-${movie.id}`}
                 >
-                  Update
+                  <FontAwesomeIcon icon={faPen}/>
                 </button>
               </div>
             </div>

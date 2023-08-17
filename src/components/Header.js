@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle'
+import 'bootstrap/dist/js/bootstrap.bundle';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCode } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
   return (
@@ -17,7 +19,8 @@ const Header = () => {
       >
         <span className="navbar-toggler-icon" />
       </button>
-      <a href="#" className="navbar-brand ">  
+      <a href="#" className="navbar-brand ">
+        <FontAwesomeIcon icon={faCode}/>
         Review-app
       </a>
     </div>
