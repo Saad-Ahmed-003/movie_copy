@@ -90,12 +90,27 @@ def update_data():
         data = request.json
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
-        query = "UPDATE movies (name, release_date, genra, image_url, about, actors) VALUES (%s, %s, %s, %s, %s, %s)"
-        actors_str=', '.join(data['actors'])
+        id = data['id']
+        print(id)
+        print(type(id))
+        print(data)
+        query = f"UPDATE movies SET name = %s, release_date = %s, genre = %s, image_url = %s, about = %s, actors = %s WHERE id = {id}"
+        
+        # Join the list of actors into a comma-separated string
+        actors_str = ', '.join(data["actors"])
+        
+        values = (data["movieName"], data["releaseDate"], data["genre"], data["imageUrl"], data["details"], actors_str)
 
-        values = (data["moviesName"], data['releaseDate'], data['genre'], data['imageUrl'], data['details'], actors_str)
+        print(values)
         cursor.execute(query, values)
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({'message': 'Data received and processed successfully'})
     except Exception as e:
+        print(e)
         return e
 
 

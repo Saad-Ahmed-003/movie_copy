@@ -9,6 +9,7 @@ function UpdateMovieData ({movie}) {
         actors: [],
         details: '',
         imageUrl: '',
+        id: movie.id,
     });
 
     const handleSubmit = async (e) => {
