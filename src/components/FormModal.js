@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';  
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 function FormModal() {
@@ -48,12 +50,12 @@ function FormModal() {
   return (
     <div>
       <button
-        className="btn position-fixed end-0 mt-2 me-2 z-1 btn-outline-primary"
+        className="btn position-fixed end-0 mt-2 me-2 z-1 btn-outline-primary rounded-circle "
         type="button"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
-        Add Movie
+        <FontAwesomeIcon icon={faPlus}/>
       </button>
 
       <div
@@ -69,12 +71,6 @@ function FormModal() {
               <h5 className="modal-title" id="exampleModalLabel">
                 Add Movie
               </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
             </div>
             <div className="modal-body">
               <form onSubmit={handleSubmit}>

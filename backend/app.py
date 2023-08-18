@@ -53,10 +53,6 @@ def get_movies():
         return jsonify({"error": "Failed to retrieve data from the database."}), 500
 
 
-
-
-
-
 @app.route('/submit', methods=['POST'])
 def submit_data():
     try:
@@ -133,6 +129,60 @@ def delete_data():
     except Exception as e:
         print(e)
 
+
+
+@app.route('/moviesGenre', methods=['POST'])
+def get_movies_by_genra():
+    try:
+        data = request.json
+        genre = data['genre']
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor(dictionary=True)  # Use dictionary cursor
+        cursor.execute(f"SELECT id, name, release_date, genre, image_url, about, actors FROM movies WHERE genre = {genre}")
+        movies_data = []
+        for movie in cursor:
+            movie_data = {
+                "id":movie["id"],
+                "Name": movie["name"],
+                "date": movie["release_date"],
+                "genre": movie["genre"],
+                "image": movie["image_url"],
+                "about": movie["about"],
+                "actors": movie["actors"].split(', ')
+            }
+            movies_data.append(movie_data)
+        connection.close()
+        return jsonify(movies_data)
+    except mysql.connector.Error as err:
+        print(f"Error fetching data from database: {err}")
+        return jsonify({"error": "Failed to retrieve data from the database."}), 500
+
+
+@app.route('/searchbar', methods=['POST'])
+def get_names():
+    try:
+        data = request.json
+        name = data['name']
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        
+        # Use parameterized query to prevent SQL injection
+        query = "SELECT id, name FROM movies WHERE name LIKE %s"
+        cursor.execute(query, (f"%{name}%",))
+        
+        names_data = []
+
+        for row in cursor.fetchall():
+            name_data = {
+                "id": row[0],  # Access columns by index
+                "name": row[1]
+            }
+            names_data.append(name_data)
+        connection.close()
+        return jsonify(names_data)
+    except mysql.connector.Error as e:
+        print(e)
+        return str(e)  # Returning the error as a string response
 
 
 
