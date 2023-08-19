@@ -186,6 +186,40 @@ def get_names():
 
 
 
+@app.route('/movieId', methods=['POST'])
+def get_movies_by_id():
+    """Returns a list of movies from the database."""
+    try:
+        data = request.json
+        id = data['id']
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Saad$123",
+            database="mydatabase"
+        )
+        cursor = connection.cursor(dictionary=True)  # Use dictionary cursor
+        cursor.execute(f"SELECT id, name, release_date, genre, image_url, about, actors FROM movies WHERE id = {id} ;")
+        movies_data = []
+        for movie in cursor:
+            movie_data = {
+                "id":movie["id"],
+                "Name": movie["name"],
+                "date": movie["release_date"],
+                "genre": movie["genre"],
+                "image": movie["image_url"],
+                "about": movie["about"],
+                "actors": movie["actors"].split(', ')
+            }
+            movies_data.append(movie_data)
+        connection.close()
+        print(movies_data)
+        return jsonify(movies_data)
+    except mysql.connector.Error as err:
+        print(f"Error fetching data from database: {err}")
+        return jsonify({"error": "Failed to retrieve data from the database."}), 500
+
+
     
 if __name__ == "__main__":
     app.run(debug=True, port=5050)
